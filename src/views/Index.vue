@@ -7,11 +7,11 @@
 </template>
 
 <script>
-import menu from './../components/menu'
+import navbar from './../components/navbar'
 export default {
   name: 'Index',
   components:{
-    m:menu
+    m:navbar
   },
   data(){
     return{

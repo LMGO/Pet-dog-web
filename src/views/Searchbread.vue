@@ -6,11 +6,11 @@
 </template>
 
 <script>
-import menu from './../components/menu'
+import navbar from './../components/navbar'
 export default {
   name: 'searchbread',
   components:{
-    m:menu
+    m:navbar
   }
 }
 </script>

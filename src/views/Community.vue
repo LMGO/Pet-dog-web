@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import menu from './../components/menu'
+import navbar from './../components/navbar'
 export default {
   name: 'Community',
    components:{
-    m:menu
+    m:navbar
   }
 }
 </script>
