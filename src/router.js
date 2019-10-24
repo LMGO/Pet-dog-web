@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from './views/Login.vue'
 import Searchbread from './views/Searchbread.vue'
 import Recognition from './views/Recognition.vue'
+import Community   from './views/Community.vue'
 
 Vue.use(Router)
 
@@ -35,6 +36,11 @@ export default new Router({
       path: '/recognition',
       name: 'Recognition',
       component:Recognition
+    },
+    {
+      path: '/community',
+      name: 'Community',
+      component:Community
     },
     
   ]

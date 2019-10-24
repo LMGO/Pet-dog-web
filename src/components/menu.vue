@@ -4,7 +4,7 @@
         <li><a class="active" href="#" @click="index()">首页</a></li>
         <li><a href="#" @click="recognition()">识别</a></li>
         <li><a href="#" @click="searchbread()">狗狗画廊</a></li>
-        <li><a href="#">狗狗社区</a></li>
+        <li><a href="#" @click="community()">狗狗社区</a></li>
         <li style="margin-left:30px;display:inline"><img src="./../assets/2.jpg">
         <span style="">退出</span></li>
         </ul>
@@ -37,7 +37,13 @@ export default {
             this.$router.replace({
             path: '/recognition'
             })}, 500)
-        }
+        },
+        community(){
+            setTimeout (() => {
+            this.$router.replace({
+            path: '/community'
+            })}, 500)
+        },
     
  }
 }
@@ -91,7 +97,7 @@ li a:hover {
 }
 li a:active{
     background-color: #111;
-    color: rgb(26, 245, 19);
+    color: rgb(12, 252, 4);
 }
 
 </style>
