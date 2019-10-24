@@ -79,7 +79,11 @@ li img{
 li span{
   font-size: 15px;
   color: white;
-  margin-left: 20px;  
+  margin-left: 20px; 
+  cursor: pointer;  
+}
+li span:hover {
+    color: blue; 
 }
 li a:hover {
     background-color: #111;
@@ -89,4 +93,5 @@ li a:active{
     background-color: #111;
     color: rgb(26, 245, 19);
 }
+
 </style>
