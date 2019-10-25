@@ -191,8 +191,8 @@ export default {
 .banner .name{
   position: absolute;
   font-family: 'Courier New', Courier, monospace;
-  top:12.5px;
-  font-size: 20px;
+  top:10px;
+  font-size: 30px;
   left:80px ;
   color:white; 
 }
@@ -200,7 +200,7 @@ export default {
   position: absolute;
   right: 80px;
   top:15px;
-  font-size: 15px;
+  font-size: 20px;
   cursor: pointer; 
   color: white;
 }
@@ -230,7 +230,7 @@ export default {
   height:95vh;
   width: 100%;
   text-align:center;
-  opacity:0.8;
+  opacity:1;
 }
 .home span{
   position: relative;
@@ -238,7 +238,7 @@ export default {
   /* margin:50vh auto; */
   padding-top: 20vh;
   line-height:50vh;
-  font-size:40px;
+  font-size:50px;
   opacity:1;
   color:black;
   }

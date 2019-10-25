@@ -1,6 +1,10 @@
 <template>
   <div class="">
     <m></m>
+    <div class="backimg">
+      <img src="./../assets/meback.jpg" style="width:100%;">
+
+    </div>
   </div>
 </template>
 
@@ -13,3 +17,9 @@ export default {
   }
 }
 </script>
+<style scoped>
+.backimg{
+  height:30vh;
+  overflow: hidden;
+}
+</style>

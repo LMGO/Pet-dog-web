@@ -1,13 +1,16 @@
 <template >
 <div class="" style="">
         <ul>
+        <li></li>
         <li><router-link to="/index">首页</router-link></li>
         <li><router-link to="/recognition">识别</router-link></li>
         <!-- <li><a href="#" @click="recognition()">识别</a></li> -->
         <li><router-link to="/searchbread">狗狗画廊</router-link></li>
         <li><router-link to="/community">社区</router-link></li>
+        
         <li style="margin-left:30px;display:inline"><img src="./../assets/2.jpg">
         <span @click="unlogin()">退出</span></li>
+        <li></li>
         </ul>
 </div>
 </template>
@@ -60,7 +63,7 @@ li a{
     display: block;
     color: white;
     text-align: center;
-    padding: 15px 15px;
+    padding: 15px 10px;
     text-decoration: none;
 }
 .router-link-active{
