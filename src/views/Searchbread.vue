@@ -11,6 +11,17 @@ export default {
   name: 'searchbread',
   components:{
     m:navbar
-  }
+  },
+  data(){
+
+  },
+  beforeMount(){
+	if(!this.$store.state.myInfo.user_id){
+		 setTimeout (() => {
+          this.$router.replace({
+		  path: '/'
+        })}, 10)
+	}
+},
 }
 </script>

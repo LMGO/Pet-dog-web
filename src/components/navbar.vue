@@ -1,14 +1,13 @@
 <template >
-<div class="" style="">
+<div class="banner">
         <ul>
         <li></li>
         <li><router-link to="/index">首页</router-link></li>
         <li><router-link to="/recognition">识别</router-link></li>
-        <!-- <li><a href="#" @click="recognition()">识别</a></li> -->
         <li><router-link to="/searchbread">狗狗画廊</router-link></li>
         <li><router-link to="/community">社区</router-link></li>
-        
-        <li style="margin-left:30px;display:inline"><img src="./../assets/2.jpg">
+        <li><router-link to="/me">我的</router-link></li>
+        <li style="margin-left:30px;display:inline"><img :src="user_head">
         <span @click="unlogin()">退出</span></li>
         <li></li>
         </ul>
@@ -20,7 +19,7 @@ export default {
   name: 'navbar',
   data(){
     return{
-
+      user_head:this.url+this.$store.state.myInfo.user_head
     }
     },
     methods:{   
@@ -35,12 +34,24 @@ export default {
                  path: '/'
                       })
                 }, 500)
+                this.$store.commit('setmyInfo','');//更新myInfo
     }
  }
 }
 </script>
 <style lang="less" scoped>
-ul {
+.banner{
+  position: fixed;
+  width: 100vw;
+  background-color: rgb(88, 87, 87);
+  height:50px;
+  margin-top: 0;
+  top: 0px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.782);
+  box-shadow: 5px 5px 5px #888888;
+  z-index:2;
+}
+ .banner ul {
     list-style-type: none;
     margin-top: 0;
     overflow: hidden;
@@ -50,6 +61,7 @@ ul {
     display: flex;
     height: 50px;
     box-shadow: 5px 5px 5px #888888;
+    z-index:9999;
 }
 
 li {

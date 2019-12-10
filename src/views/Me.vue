@@ -3,51 +3,68 @@
 	    <div>
 			<m></m>
 		</div>	
-	    <!------发布入口---->
-		<div class="publish">
-			<img src="../assets/publish.png" @click="showpubform">
-		</div>
-		<!------发布输入页面---->
-		<div class="pubform" v-show="showpub">
-			<span class="tuichu" @click="esc">取消</span>
-			<div style="margin:2.5%  45% 0 ;">
-				<h4>发贴</h4>
+	<!------个人信息展示及大背景---->
+		<div class="ban">
+			<div class="ban-image">
+				<div class="backstretch">
+					<img src="../assets/dog11.jpg" >
+				</div>
+				</div>
+				<div class="ban-caption">
+					<img :src="user_head" class="headPhoto" @click="toshow()" style="border:1px solid black;z-index：999"  />
+					<p style="font-size: 22px;margin: 15px;">{{myInfo.user_name}}</p>
+					<p style="font-size: 15px;margin-top: 15px;">我的个性签名：&nbsp;{{myInfo.user_sign}}</p>
+					<div>
+						<span>33关注</span> &nbsp;
+						<span>0粉丝</span>
+					</div>
+					<!-- <div style="margin-top:15px">
+						<ul>
+							<li>我要发帖</li>
+						</ul>
+					</div>				 -->
+				</div>
+		</div>	
+	<!---查看个人资料及修改---->
+    <div class="login-lay" v-show="showchange">
+		    <span style="float:right;margin:10px 20px;color:black;cursor: pointer;" @click="esc">取消</span>	
+			<p>修改个人信息</p>
+			<input type="button" id="btn1" value="修改基础信息" @click="changedetail()" style="margin-bottom:10px">
+			<input type="button" id="btn1" value="修改密码"  @click="changecode()" style="margin-bottom:10px">
+			<div v-show="showchangeInfo">
+				<div style="width: 350px;margin: 0 auto;text-align: left;">
+					<img :src="user_headchange" class="user-image2" width="50px" style="border: 1px solid #dddddd;">
+					<label>
+						<input type="button" id="btn" value="选择图片" style="margin-bottom:10px">
+						<input type="button" id="btn" value="修改" style="margin-bottom:10px" @click="change()">
+						
+						<input type="file" id="fileinp" value="选择图片"  @change="uploadFile($event)" accept=".jpg"> 
+					</label>
+				</div>
+				<input type="text"  value="" placeholder="用户名" v-model="user_namechange">
+				<input type="text"  placeholder="个性签名" v-model="user_signchange">
+				<form>
+					性别：
+					<label>保密<input type="radio" v-model="user_sexchange" value="保密"/></label> &nbsp; 	
+					<label>男<input type="radio" v-model="user_sexchange" value="男"/></label> &nbsp; 
+					<label>女<input type="radio" v-model="user_sexchange" value="女"/></label> 
+				</form>
+				<input type="button" class="bgc-orange"  @click="surechange()"  value="确认">
 			</div>
-			<div class="vue-uploader"  v-show="showpub">
-				<!-- <input placeholder="选择帖子类型吧" v-model="type"/> -->
-				<select style="width:71%;" name="public-choice" v-model="couponSelected" @change="getCouponSelected">                                        
-    				<option :value="coupon.name" v-for="(coupon,index) in couponList" :key="index" >{{coupon.name}}</option>                                    
-				</select>
-				<textarea placeholder="来说几句吧" type="text" rows="7" maxlength="200" v-model="pubposting_content"/>
-				<!-- <section class="upload-func"> 
-				</section> -->
-				<el-upload
-				class="up"
-				action=""
-				list-type="picture-card"
-				:auto-upload="false"
-				:multiple="true"
-				:limit="3"
-				:on-preview="handlePictureCardPreview"
-				:on-remove="handleRemove"
-				:http-request="uploadFile"
-				ref="upload"
-				accept="image/jpg"
-				>
-				<i class="el-icon-plus"></i>
-				</el-upload>
-				<el-dialog :visible.sync="dialogVisible">
-				<img width="80%" :src="dialogImageUrl" alt="">
-				</el-dialog>
-				<el-button type="primary" @click="subPicForm">发表</el-button>
-  			</div>
-		</div>
-		<!-----帖子及猜你喜欢--->
+			<div v-show="showchangecode">
+				<input type="password"  placeholder="原密码" v-model="user_codechange" @blur="code()">
+				<input type="password"  placeholder="新密码" v-model="user_codeagain1" @blur="code1()">
+				<input type="password"  placeholder="再次新密码" v-model="user_codeagain2">
+				<input type="button" class="bgc-orange"  @click="surechange()"  value="确认">
+			</div>
+			
+	</div>
+			<!-----帖子及猜你喜欢--->
 	 <div class="tiezi">
 				<div class="tiezilf" >
 					<!-- <div class="sousuo"><span>搜索</span><input type="text" placeholder="快速搜索你的狗狗" value=""></div> -->
 					<div>
-						<h3 style="text-align: center;margin:10px auto">最新发布</h3>
+						<h3 style="text-align: center;margin:10px auto">我的发布</h3>
 						<ul>
 							<li v-for="(pub,index) in posting" :key="index"> 
 							    <div class="blogtitle1">
@@ -119,36 +136,32 @@
 </template>
 
 <script>
-// import axios from "axios"
 import navbar from './../components/navbar'
 export default {
-  name: 'Community',
+  name: 'Me',
    components:{
     m:navbar
   },
   data(){
 	  return{
-		showpub:false,//控制发帖框
-		myinfo: this.$store.state.myInfo,
-		// user_head:this.url+this.$store.state.myInfo.user_head,
-		 //发表帖子文字内容
-		dialogImageUrl: '',
-		dialogVisible: false,
-        formDate: ""  ,
-		pubposting_content:'',
-	 	couponList:[
-					{
-						name: '哈士奇'
-					},
-					{
-						name: '金毛'
-					},
-					{
-						name: '其它'
-					}
-				],
-        couponSelected: '',//posting_type选择
-		posting:[
+		myInfo: this.$store.state.myInfo,
+		user_head:this.url+this.$store.state.myInfo.user_head,
+		//展示个人信息修改框
+		showchange:false,
+		user_headchange:this.url+this.$store.state.myInfo.user_head,
+		user_namechange:this.$store.state.myInfo.user_name,
+		//基础信息修改
+		showchangeInfo:true,
+		user_signchange:this.$store.state.myInfo.user_sign,
+		user_sexchange:this.$store.state.myInfo.user_sex,
+		//密码修改
+		showchangecode:false,
+		user_codechange:'',
+		user_codeagain1:'',
+		user_codeagain2:'',
+		
+		formdata:"",
+	 	posting:[
 			{
 				user_head:this.url+'//images/default1.jpg',
 				// user_head:require("../assets/dog1.jpg"),
@@ -188,7 +201,7 @@ export default {
 	}
   },
   beforeMount(){
-	// this.getpost()
+	// this.getmypost()
 	if(!this.$store.state.myInfo.user_id){
 		 setTimeout (() => {
           this.$router.replace({
@@ -196,12 +209,221 @@ export default {
         })}, 10)
 	}
 },
-//    created(){
-////如果没有这句代码，select中初始化会是空白的，默认选中就无法实现
-//             this.couponSelected = this.couponList[0].id;
-//          },
   methods:{
-	  tolike(i){
+	//控制个人信息修改显示
+	changedetail(){
+		this.showchangecode = false
+		this.showchangeInfo = true
+	},
+	//控制密码修改显示
+	changecode(){
+		this.showchangecode = true
+		this.showchangeInfo = false
+	},
+	esc(){
+		this.showchange = false
+		this.user_headchange = this.url+this.$store.state.myInfo.user_head
+		this.user_namechange = this.$store.state.myInfo.user_name
+		this.user_codechange = ''
+		this.user_codeagain1 = ''
+		this.user_codeagain2 = ''
+		this.user_sign = ''
+		this.user_headchange = this.user_head
+	},
+	//控制显示基础信息框
+	toshow(){
+		this.showchange = true
+	},
+	//选择头像
+	uploadFile (el) {
+      if (!el.target.files[0].size) return; // 如果文件大小为0，则返回
+      if (el.target.files[0].type.indexOf('image/jpeg') === -1) { //如果不是图片格式
+		// this.$dialog.toast({ mes: '请选择图片文件' });
+		this.$message({
+					showClose: true,
+					message: '抱歉，系统目前只支持.jpg格式图片！',
+					type: 'error'
+				});
+        console.log('请选择图片文件');
+      } else {
+        const that = this;
+        const reader = new FileReader(); // 创建读取文件对象
+        reader.readAsDataURL(el.target.files[0]); // 发起异步请求，读取文件
+        reader.onload = function () {  // 文件读取完成后
+          // 读取完成后，将结果赋值给img的src
+          that.user_headchange = this.result;
+        //   console.log(that.result);
+        };
+        const user_id = that.$store.state.myInfo.user_id; //后台需要的参数
+        const formData = new FormData();  // 创建一个formdata对象
+        formData.append("file", el.target.files[0],el.target.files[0].name); 
+		formData.append('user_id', user_id)
+		console.log(that.formdata)
+		that.formdata = formData
+      }
+	},
+	//确认修改头像
+	change(){
+		let that = this
+		let config = {
+				headers: {'Content-Type': 'multipart/form-data'}
+				}
+
+			that.$axios.post(that.url+'/users/updateUserhead',this.formdata,config)
+				.then((res) => {
+					console.log(res.data)
+					console.log(res.data.data) //返回的数据
+					// console.log( that.user_headchange)
+					that.myInfo.user_head = res.data.data
+					that.$store.commit("setmyInfo", that.myInfo);//更新本地用户信息
+					that.user_head = that.url+this.$store.state.myInfo.user_head
+				})
+				.catch((err) => {
+					console.log(err) //错误信息
+				})
+	},
+	//自动判断原密码
+	code(){
+		if(this.user_codechange!=this.myInfo.user_code){
+			this.$message({
+						showClose: true,
+						message: '原密码错误！',
+						type: 'error'
+				});
+		}
+	},
+	//判新密码与旧密码
+	code1(){
+		if(this.user_codeagain1 == this.myInfo.user_code){
+			this.$message({
+						showClose: true,
+						message: '输入的新密码和原密码一致！',
+						type: 'error'
+				});
+		}
+	},
+	//修改基础信息
+	surechange(){
+		let that = this
+		if(that.showchangeInfo){//修改基础信息
+			if(!that.user_namechange||!that.user_signchange){
+				setTimeout(function(){
+					that.$message({
+						showClose: true,
+						message: '用户名或者用户签名为空！',
+						type: 'error'
+					});
+				},500)	
+			}
+			else{//发请求修改
+				that.$axios.post(that.url+"/users/update",that.$qs.stringify({
+							user_id : that.$store.state.myInfo.user_id,
+						  user_code : that.$store.state.myInfo.user_code,//不变
+						  user_name : that.user_namechange,
+						   user_sex : that.user_sexchange,
+					      user_sign : that.user_signchange
+			   })
+			)
+			.then(res => {
+				if(res.data.status==1){
+						that.$message({
+							showClose: true,
+							message: '修改成功！',
+							type: 'success'
+						});
+				//更新本地存储
+				that.myInfo.user_name = that.user_namechange
+				that.myInfo.user_sign = that.user_signchange
+				that.myInfo.user_sex = that.user_sexchange
+				that.$store.commit("setmyInfo", that.myInfo)
+				console.log(that.myInfo.user_sex)
+				}
+				else if(res.data.status==2){
+						that.$message({
+					showClose: true,
+					message: '数据无变化！',
+					type: 'success'
+				});
+				}
+				else{
+					that.$message({
+					showClose: true,
+					message: '修改失败！',
+					type: 'error'
+				});
+				}
+				}).catch(err => {
+				console.log(err)
+					that.$message({
+						showClose: true,
+						message: '修改失败！',
+						type: 'error'
+					});
+				})
+			}
+		}
+		else{//修改密码信息
+			if(!that.user_codechange||!that.user_codeagain1||!that.user_codeagain2){
+				that.$message({
+					showClose: true,
+					message: '请填写密码信息！',
+					type: 'error'
+				});
+			}
+			else if(that.user_codeagain1!= that.user_codeagain2){
+					this.$message({
+						showClose: true,
+						message: '输入的新密码和原密码一致！',
+						type: 'error'
+				});
+			}
+			else{
+				that.$axios.post(that.url+"/users/update",that.$qs.stringify({
+							user_id : that.$store.state.myInfo.user_id,
+						  user_code : that.user_codeagain1,//不变
+						  user_name :  that.$store.state.myInfo.user_name,//不变
+						   user_sex :  that.$store.state.myInfo.user_sex,//不变
+					      user_sign :  that.$store.state.myInfo.user_sign//不变
+			   })
+			)
+			.then(res => {
+				if(res.data.status==1){
+						that.$message({
+							showClose: true,
+							message: '修改成功！',
+							type: 'success'
+						});
+				//更新本地存储
+				that.myInfo.user_code = that.user_codeagain1
+				that.$store.commit("setmyInfo", that.myInfo)
+				}
+				else if(res.data.status==2){
+						that.$message({
+					showClose: true,
+					message: '数据无变化！',
+					type: 'success'
+				});
+				}
+				else{
+					that.$message({
+					showClose: true,
+					message: '修改失败！',
+					type: 'error'
+				});
+				}
+				}).catch(err => {
+				console.log(err)
+					that.$message({
+						showClose: true,
+						message: '修改失败！',
+						type: 'error'
+					});
+				})
+			}
+		}
+	},
+	//点赞
+	tolike(i){
 		let that = this
 		if(that.posting[i].islike == require('../static/like.png') ){
 		// 	 that.$axios.post('',that.$qs.stringify({
@@ -285,36 +507,8 @@ export default {
 			});
 			this.talk = !this.talk;
 	  },
-	  //展示发帖框
-	  showpubform(){
-		  this.showpub = true
-		  alert("hhahahahah")
-	  },
-	  //取消发帖
-	  esc(){
-		  this.showpub = false;
-		  this.couponSelected = ""
-		  this.pubposting_content = ""
-		  this.$refs.upload.clearFiles();
-	  },
-	   //获取选中的帖子类型
-	  getCouponSelected(){
-        console.log(this.couponSelected)
-	  },
-	  // elementUI上传
-      uploadFile(file) {
-        this.formDate.append('file', file.file);
-	  },
-	  //预览图片
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-	  },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-	  },
-	  //获取用户帖子
-	  getpost(){
+	  //获取我的帖子
+	  getmypost(){
 		let that = this;
 		that.$axios.get('',that.$qs.stringify({
             user_id: that.$store.state.myInfo.user_id,
@@ -343,102 +537,79 @@ export default {
 				});
 		})
 
-	  },
-	  //发表
-      subPicForm() {
-		let that =this
-		// let posting_time = that.$store.state.getTime()
-		// let posting_type = that.couponSelected
-		// let posting_content = that.posting_content
-		// console.log(that.couponSelected)
-		let posting_id = that.$store.state.getPid()
-		console.log(posting_id)
-		// console.log(that.$store.state.getTime())
-			if( !that.couponSelected){
-				that.$message({
-								showClose: true,
-								message: '请选择帖子类别！',
-								type: 'error'
-						});
-			}else{
-				that.$axios.post(this.url+"/post/newpost", that.$qs.stringify({
-			  posting_id: posting_id,
-              user_id: that.$store.state.myInfo.user_id,
-			  posting_type : that.couponSelected,
-			  posting_content : that.pubposting_content,
-              posting_time: that.$store.state.getTime()
-			})
-		)
-       .then(res => {
-		  console.log(res)
-		  if(res.data.status == 2){
-			  console.log("帖子内容发表成功")
-			  	    that.formDate = new FormData();
-				    that.$refs.upload.submit();
-				    that.formDate.append('posting_id', posting_id);
-				    let config = {
-				      headers: {
-				        'Content-Type': 'multipart/form-data'
-				      }
-				    };
-				   that.$axios.post(this.url+"/post/postingpic", that.formDate, config)
-				   .then(res => {
-					   console.log(res)
-					   if(res.data.status == 2){
-						   that.$message({
-							showClose: true,
-							message: '发表成功！',
-							type: 'success'
-						});
-						that.showpub = false;
-						that.couponSelected = ""
-						that.posting_content = ""
-						that.$refs.upload.clearFiles();
-					   }
-					   else{
-						    that.$message({
-							showClose: true,
-							message: '帖子发表异常！',
-							type: 'error'
-						});
-					   }
-					  
-				    }).catch(res => {
-					  console.log(res)
-					   that.$message({
-							showClose: true,
-							message: '帖子发表异常！',
-							type: 'error'
-						});
-				    })
-			}
-			else{
-				that.$message({
-						showClose: true,
-						message: '发表失败！',
-						type: 'error'
-					});
-			}
-        }).catch(res => {
-		  console.log(res)
-		  that.$message({
-					showClose: true,
-					message: '发表失败！',
-					type: 'error'
-				});
-        })
-		}
-			
-		
-   
-	},
-
-	
+	  }  
   }
 }
 </script>
 <style scoped>
-			.user-image{
+			.ban {
+				/* margin-top:50px; */
+				width: 100%;
+				height:300px;
+				position: fixed;
+				color: #fff; 
+				z-index: 1;
+			    box-shadow: 2px 2px 2px #888888;
+			}
+			.ban-image {
+				vertical-align: middle;
+				min-height: 100%;
+				width: 100%;
+				z-index: 2;
+				background: none;
+			}
+		    .ban .backstretch{
+				left: 0px;
+				overflow: hidden;
+				margin: 0px;
+				padding: 0px;
+				height: 300px;
+				width: 100%;
+				z-index: 2;
+			}
+			.backstretch img {
+				margin: 0px;
+				padding: 0px;
+				border: none;
+				width: 100%;
+				height: 300px;
+				max-height: none;
+				max-width: none;
+				z-index: 2;				
+				top: 0px;
+			}
+			.ban-caption {
+				position: absolute;
+				top: 100px;
+				width: 100%;
+				z-index: 1;
+				text-align: center;
+			}
+			.ban-caption ul {
+				list-style-type: none;
+				float: right;
+				height: 50px;
+				line-height: 50px;
+				margin: 0 150px 0 0;
+			}
+			/* .ban-caption ul li {
+				float: left;
+        margin-right: 15%;
+				text-align: center;
+				line-height: 50px;
+			} */
+			.ban-caption ul li {
+				font-size: 20px;
+				display: block;
+				position: relative;
+				padding: 0 25px;
+				color: #fff;
+				cursor: pointer;
+			}
+			.ban-caption ul li:hover {
+				color: rgb(12, 252, 4);
+			}
+			   .user-image{
 				display: inline-block;
 				width: 30px;
 				height: 30px;
@@ -456,7 +627,7 @@ export default {
 				overflow-y: scroll;
 				position: absolute;
 				background: #e6090900;
-				margin-top: 50px;
+				margin-top: 300px;
 				padding-top: 10px;
 				width: 100%;
 			}
@@ -576,32 +747,32 @@ export default {
 				width: 400px;
 				background-color: #fff;
 				position: absolute;
-				right:150px;
+				right:25%;
 				top: 150px;
 				text-align: center;
 				z-index: 999;
 				border:1px solid #ddd;
 				border-radius: 10px;
 			}
-			.login-lay>p {
+			.login-lay>div>p {
 				font-size: 20px;
 				padding: 5px 10px ;
 				color: #222;
 				text-align: center;
 			}
-			.login-lay>input {
+			.login-lay>div>input {
 				height: 40px;
 				/* line-height: 40px; */
 				width: 350px;
 				font-size: 14px;
-				color: #999;
+				color:black;
 				background: #e4e5e9;
 				border: 1px solid #e5e5e5;
 				padding-left: 15px;
 				margin-bottom: 15px;
 				border-radius: 50px;
 			}
-			.login-lay>form {
+			.login-lay>div>form {
 				height: 40px;
 				width: 350px;
 			}
@@ -642,20 +813,30 @@ export default {
 				position: absolute;
 				left: 0;
 				top: 0;
-				opacity: 0;
+				opacity:0;
+				width: 70px;
 			}
+			/* #text{
+				color: red;
+			} */
 			#btn{
 				margin-right: 5px;
-			}
-			#text{
-				color: red;
-			}
-			#btn{
-				padding: 5px 10px;
+				padding: 5px 5px;
 				background: #00b0f0;
 				color: #FFF;
 				border: none;
 				border-radius: 5px;
+				width: 70px;
+			}
+			#btn1{
+				margin-right: 5px;
+				padding: 0px 5px;
+				background:  #00b0f0;
+				color: #FFF;
+				border: none;
+				border-radius: 10px;
+				width: 100px;
+				height: 40px;
 			}
 			.dogtype{
 				display: inline-block;
@@ -690,7 +871,7 @@ export default {
 				top:14%;
 				left: 30%;
 				width: 30%;
-				background: rgba(212, 221, 221, 0.796);
+				background: #e33c64;
 				position: fixed;
 				box-shadow: 5px 5px 5px #888888;
 				z-index: 3;
@@ -740,7 +921,7 @@ export default {
 			/*评论框*/
 			.coment {
 				position: fixed;
-				top: 170px;
+				top: 420px;
 				margin-left: 30vw ;
 				width: 30vw;
 				height: 200px;
@@ -772,48 +953,4 @@ export default {
 			.coment button:active {
 				background-color: lightblue;
 			}
-			/* .vue-uploader .add {
-				width: 80px;
-				height: 80px;
-				margin-left: 10px;
-				float: left;
-				text-align: center;
-				line-height: 80px;
-				border: 1px dashed #ececec;
-				font-size: 30px;
-				cursor: pointer;
-			}
-
-
-			.vue-uploader .upload-func .progress-bar {
-				flex-grow: 1;
-			}
-
-			.vue-uploader .upload-func .progress-bar section {
-				margin-top: 5px;
-				background: #00b4aa;
-				border-radius: 3px;
-				text-align: center;
-				color: #fff;
-				font-size: 12px;
-				transition: all .5s ease;
-			}
-
-			.vue-uploader .upload-func .operation-box {
-				flex-grow: 0;
-				padding-left: 10px;
-			}
-
-			.vue-uploader .upload-func .operation-box button {
-				padding: 4px 12px;
-				color: #fff;
-				background: #007ACC;
-				border: none;
-				border-radius: 2px;
-				cursor: pointer;
-			}
-
-			.vue-uploader > input[type="file"] {
-				display: none;
-			} */
 </style>
