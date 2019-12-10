@@ -9,110 +9,14 @@
           <span class="register" @click="showreg()">注册</span>
         </div> 
     </div>
-   <!-- <div class="home">
-      <span>欢迎来到识汪君狗狗社区！</span>
-      登录
-      <el-dialog custom-class="custom-class" title="登录" :visible.sync="loginVisible" center :append-to-body='true' :lock-scroll="false" width="25%">
-          <el-container width="25%">
-        <el-form label-width="120px">
-          <el-row>
-            <el-col>
-              <el-form-item label="账号" prop="name">
-                <el-input ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-form-item label="密码" prop="pass">
-                <el-input type="password" auto-complete="new-password"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <span class="pwwd">
-            还没账号去？  <a href="#" @click="showreg">注册</a>
-          </span>
-        </el-form>
- 
-    </el-container>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="esc()">取 消</el-button>
-      <el-button type="primary" @click="login()">登 录</el-button>
-    </div>
-    </el-dialog>
-   注册
-    <el-dialog title="注册" :visible.sync="registerVisible" center :append-to-body='true' :lock-scroll="false" width="25%">
-          <el-container>
-        <el-form label-width="120px" :model="ruleForm" status-icon :rules="rules" ref="ruleForm">
-          <el-row>
-            <el-col>
-              <el-form-item label="手机号"  prop="phone">
-                <el-input v-model.number="ruleForm.phone"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-form-item label="验证码" prop="name">
-                <el-input></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-form-item label="用户名" prop="name">
-                <el-input></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-form-item label="密码" prop="pass">
-                <el-input type="password" show-password="true" auto-complete="new-password"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-form-item label="确认密码" prop="name">
-                <el-input type="password" auto-complete="new-password"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <el-form-item label="性别" prop="name">
-                <template>
-                  <el-radio-group v-model="radio">
-                    <el-radio :label="3">男</el-radio>
-                    <el-radio :label="6">女</el-radio>
-                    <el-radio :label="9">保密</el-radio>
-                  </el-radio-group>
-                </template>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <span class="pwwd">
-            已有账号？去  <a href="#" @click="showlogin">登录</a>
-          </span>
-        </el-form>
- 
-    </el-container>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="esc()">取 消</el-button>
-      <el-button type="primary" @click="register()">注册</el-button>
-    </div>
-    </el-dialog>
-
-    </div>
-</div> -->
 	<!---登录注册框--->
 			<div class="login-lay" v-show="showloginform">	
                         <p>Login</p>
 						<input type="text" value="" placeholder="手机号" v-model="loginform.user_id">
 						<input type="password" placeholder="密码" v-model="loginform.user_code">
-						<el-button @click="esc()">取 消</el-button>
-      					<el-button type="primary" @click="login()">登录</el-button>
+						<br>
+						<el-button type="primary" style="height:25px;width:40px"  @click="esc()">取 消</el-button>
+      					<el-button type="primary" style="height:25px;width:40px" @click="login()">登录</el-button>
 			</div>
 			<div class="login-lay" v-show="showregform">	
                         <p>register</p>
@@ -128,8 +32,8 @@
 							<label>女<input type="radio" v-model="regform.user_sex" value="女"/></label> 
 						</form>
 						<br/>
-						<el-button @click="esc()">取 消</el-button>
-      					<el-button type="primary" @click="register()">注册</el-button>
+						<el-button type="primary" style="height:25px;width:40px" @click="esc()">取 消</el-button>
+      					<el-button type="primary" style="height:25px;width:40px" @click="register()">注册</el-button>
 			</div>
 			<!---大背景--->
 			<div class="ban">
