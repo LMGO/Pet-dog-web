@@ -8,6 +8,6 @@
 body{
   margin: 0;
   margin-top: 0;
-  background: lightblue
+  background: rgb(216, 236, 243)
 }
 </style>

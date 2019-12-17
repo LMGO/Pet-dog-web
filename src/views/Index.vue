@@ -20,10 +20,10 @@
 				</div>				
 				<div class="lubo">
 								<div class="ban-inner">
-									<img src="../assets/dog4.jpg"  onclick="linkDog()" alt="" name="0">
-									<img src="../assets/dog5.jpg"  onclick="linkDog()" alt="" name="1">
-									<img src="../assets/dog6.jpg"  onclick="linkDog()" alt="" name="2">
-									<img src="../assets/dog7.jpg"  onclick="linkDog()" alt="" name="3">
+									<img src="../assets/dog4.jpg"   alt="" name="0">
+									<img src="../assets/dog5.jpg"   alt="" name="1">
+									<img src="../assets/dog6.jpg"   alt="" name="2">
+									<img src="../assets/dog7.jpg"   alt="" name="3">
 								</div>
 								<div class="ctrlbtn">
 									<a href="javascript:;" class="prev">&gt;</a>
@@ -40,27 +40,27 @@
 						<div style="height: 800px;">
 							<div style="float: left;width: 70%;">
 								<div>
-									<img src="../assets/dog9.jpg"  onclick="linkDog()" width="100%" height="400px" />
+									<img src="../assets/dog9.jpg"   width="100%" height="400px" />
 								</div>
 								<div>
 									<div style="float: left;width: 50%;">
-										<img src="../assets/dog7.jpg"  onclick="linkDog()" width="100%"  height="400px" />
+										<img src="../assets/dog7.jpg"   width="100%"  height="400px" />
 									</div>
 									<div style="float: right;width: 50%;">
-										<img src="../assets/dog8.jpg"  onclick="linkDog()" width="100%"  height="400px" />
+										<img src="../assets/dog8.jpg"   width="100%"  height="400px" />
 									</div>
 								</div>
 							</div>
 							<div style="width: 30%;float: right;">
-								<img src="../assets/dog3.jpg"  onclick="linkDog()" width="100%" height="800px" />
+								<img src="../assets/dog3.jpg"   width="100%" height="800px" />
 							</div>
 						</div>
 						<div >
 							<div style="width: 70%;float: left;">
-								<img src="../assets/dog5.jpg"  onclick="linkDog()" width="100%" height="300px" />
+								<img src="../assets/dog5.jpg"   width="100%" height="300px" />
 							</div>
 					<div style="width: 30%;float: left;margin: 0 0 30px;">
-					<img src="../assets/dog13.jpg"  onclick="linkDog()" width="100%" height="300px"  />
+					<img src="../assets/dog13.jpg"   width="100%" height="300px"  />
 					</div>
 				</div>
 						<div style="border:2px solid rgb(208,124,124)">

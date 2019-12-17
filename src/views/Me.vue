@@ -38,7 +38,7 @@
 						<input type="button" id="btn" value="选择图片" style="margin-bottom:10px">
 						<input type="button" id="btn" value="修改" style="margin-bottom:10px" @click="change()">
 						
-						<input type="file" id="fileinp" value="选择图片"  @change="uploadFile($event)" accept=".jpg"> 
+						<input type="file" id="fileinp" value=""  @change="uploadFile($event)" accept=".jpg"> 
 					</label>
 				</div>
 				<input type="text"  value="" placeholder="用户名" v-model="user_namechange">
@@ -60,23 +60,24 @@
 			
 	</div>
 			<!-----帖子及猜你喜欢--->
+	<div class="box">		
 	 <div class="tiezi">
 				<div class="tiezilf" >
 					<!-- <div class="sousuo"><span>搜索</span><input type="text" placeholder="快速搜索你的狗狗" value=""></div> -->
 					<div>
 						<h3 style="text-align: center;margin:10px auto">我的发布</h3>
-						<ul>
+							<ul>
 							<li v-for="(pub,index) in posting" :key="index"> 
 							    <div class="blogtitle1">
-								  <img class="user-image" :src="pub.user_head" />
-								  <span>{{pub.user_name}}</span>
-								  <span class="dogtype">{{pub.posting_type}}</span>
-								  <span class="ttime">{{pub.posting_time}}</span>
+								  <img class="user-image" :src="pub.userHead" />
+								  <span>{{pub.userName}}</span>
+								  <span class="dogtype">{{pub.petName}}</span>
+								  <span class="ttime">{{pub.postingTime}}</span>
 								</div>
 								<!---帖子内容--->	
 								<div>	
-									<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{pub.posting_content}}</p>
-									<img v-for="(image,index1) in pub.images" :key="index1" style="margin-right:15px" width="150px" height="150px" :src="image.posting_pic"/>
+									<p>{{pub.postingContent}}</p>
+									<img v-for="(image,index1) in pub.postingpic" :key="index1" style="margin-right:15px" width="150px" height="150px" :src="image.postingPic"/>
 									<div class="autor">
 										<img :src="pub.islike" height="20px" alt="" @click="tolike(index)">
 										<span style="margin-left: 10px;font-size:18px">{{pub.likecount}}</span>	
@@ -88,13 +89,13 @@
 							    <div>
 									<ul>
 										<li v-for="(comment,index2) in pub.comment" :key="index2"> 
-											<img class="user-image2" height="20px" width="20px" :src="comment.user_head">
-											<span style="font-size:15px">{{comment.user_name}}&nbsp;:&nbsp;&nbsp;</span>
-											<span>{{comment.comment_content}}</span>
+											<img class="user-image2" height="20px" width="20px" :src="comment.userHead">
+											<span style="font-size:15px">{{comment.userName}}&nbsp;:&nbsp;&nbsp;</span>
+											<span>{{comment.commentContent}}</span>
 											<!--&nbsp; &nbsp;回复&nbsp;&nbsp;
 											 <img class="user-image" src="../assets/dog1.jpg">
-											<span>小狗狗</span>
-											<span style="float:right;margin-right:15%">回复的时间</span> -->
+											<span>小狗狗</span>-->
+											<span style="float:right;margin-right:15%;color:gray">{{comment.commentDate}}</span> 
 												<!-- <div class="bloginfo">
 													<span>{{comment.comment_content}}</span>
 												</div> -->
@@ -132,6 +133,7 @@
 					   </ul>
 				</div> 
 			</div>
+		</div>	
   </div>
 </template>
 
@@ -163,18 +165,18 @@ export default {
 		formdata:"",
 	 	posting:[
 			{
-				user_head:this.url+'//images/default1.jpg',
+				userHead:this.url+'//images/default1.jpg',
 				// user_head:require("../assets/dog1.jpg"),
-				user_name: '爱宠之家',
-				posting_time:'2019-12-8',
-				posting_type:'泰迪',
-				posting_content:'天气真好，适合带狗狗出去散步',
-				images:[
+				userName: '爱宠之家',
+				postingTime:'2019-12-8',
+				petName:'泰迪',
+				postingContent:'天气真好，适合带狗狗出去散步',
+				postingpic:[
 					{
-						posting_pic:require("../assets/dog1.jpg")
+						postingPic:require("../assets/dog1.jpg")
 					},
 					{
-						posting_pic:this.url+'//images/default1.jpg',
+						postingPic:this.url+'//images/default1.jpg',
 					}
 
 				],
@@ -183,17 +185,19 @@ export default {
 				likecount:15,
 				comment:[
 					{
-						user_head:require("../assets/dog1.jpg"),
-						user_name:'么么哒',
-						comment_content:'哈哈哈哈哈'
+						userHead:require("../assets/dog1.jpg"),
+						userName:'么么哒',
+						commentContent:'哈哈哈哈哈',
+						commentDate:'2019-12-31'
 					},
 					{
-						user_head:require("../assets/dog1.jpg"),
-						user_name:'么么哒',
-						comment_content:'哈哈哈哈哈'
+						userHead:require("../assets/dog1.jpg"),
+						userName:'么么哒',
+						commentContent:'哈哈哈哈哈',
+						commentDate:'2019-12-31'
 					}
 				]
-			}	
+			}
 		],
 		talk:false,//控制评论框
 		pubcomment_content:''
@@ -228,7 +232,8 @@ export default {
 		this.user_codeagain1 = ''
 		this.user_codeagain2 = ''
 		this.user_sign = ''
-		this.user_headchange = this.user_head
+		this.showchangecode = false
+		this.showchangeInfo = true
 	},
 	//控制显示基础信息框
 	toshow(){
@@ -623,19 +628,23 @@ export default {
 				border-radius: 70px;
 				display: inline-block;
 			}
+			.box{
+				width: 100%;
+				margin: 0 7.5%;
+			}
 			.tiezi{
 				overflow-y: scroll;
 				position: absolute;
 				background: #e6090900;
 				margin-top: 300px;
 				padding-top: 10px;
-				width: 100%;
+				width: 85%;
 			}
 			.tiezi::-webkit-scrollbar {
 				display: none;
 			}
 			.tiezilf{
-				width: 70%;
+				width: 80%;
 				float: left;
 				padding:0px 20px 40px ;
 				border-right: 2px solid rgb(179, 175, 175);
@@ -707,10 +716,10 @@ export default {
 			/*------猜你喜欢---*/
 			.youlike{
 				position:fixed;
-				width: 30%;
+				width: 20%;
 				/* float: left; */
-				left: 70%;
-				padding: 0 20px ;
+				left: 72.5%;
+				margin: 0 50px ;
 				box-sizing: border-box;
 				text-align: center;
 				/* margin: 10px auto; */
