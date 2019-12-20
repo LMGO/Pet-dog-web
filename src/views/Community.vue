@@ -59,7 +59,7 @@
 								</div>
 								<!---帖子内容--->	
 								<div>	
-									<p>{{pub.postingContent}}</p>
+									<p style="margin-top:25px">{{pub.postingContent}}</p>
 									<img v-for="(image,index1) in pub.postingpic" :key="index1" style="margin-right:15px" width="150px" height="150px" :src="image.postingPic"/>
 									<div class="autor">
 										<img :src="pub.islike" height="20px" alt="" @click="tolike(index)">
@@ -87,7 +87,7 @@
 									 <!-- 评论框 -->
 									<div class="coment" v-show="talk">
 										<textarea autofocus="autofocus" rows="3" v-model="pubcomment_content" maxlength="200"></textarea>
-										<button @click="toPubtalk()">发表</button>
+										<button @click="toPubtalk(index)">发表</button>
 										<button @click="quxiaototalk()">取消</button>
 									</div>
 							  </div>
@@ -240,43 +240,77 @@ export default {
   methods:{
 	  tolike(i){
 		let that = this
-		if(that.posting[i].islike == require('../static/like.png') ){
-			 that.$axios.post('that.url1',that.$qs.stringify({
-              user_id: that.$store.state.myInfo.user_id,
-              posting_id: that.posting[i].posting_id,
-            })
-          )
+		if(that.posting[i].islike == require('../static/like.png')  ){
+			 that.$axios.get(that.url1+'/backend/comment/insertlike',{
+				params:{
+					userId: that.$store.state.myInfo.user_id,
+					postingId: that.posting[i].postingId
+				}
+			})
           .then(res => {
-            console.log(res);
-			console.log("点赞成功！");
+			console.log(res)
+			console.log(res.data)
+			console.log(res.data.like)
+			if(res.data.like){
+				console.log("点赞成功！");
 			that.posting[i].islike =  require('../static/like-active.png') ;
-            that.posting[i].likecount += 1;
+			that.posting[i].likeSum += 1;
+			// that.getpost()
+			}else{
+				console.log("点赞失败！");
+				setTimeout(function(){
+					that.$message({
+						showClose: true,
+						message: '点赞失败！',
+						type: 'error'
+						});
+				},500)
+			}
+			// that.posting[i].islike = require('../static/like-active.png') ;
+         	// that.posting[i].likeSum += 1;
           })
           .catch(err =>{
-            console.log(err);
+			console.log(err);
+			setTimeout(function(){
+				that.$message({
+					showClose: true,
+					message: '点赞失败！',
+					type: 'error'
+				});
+			},500)
           });
-          that.posting[i].islike =  require('../static/like-active.png') ;
-          that.posting[i].likecount += 1;
 		}
 		else{
           // 取消点赞
-        console.log(that.posting[i].posting_id);
-        //   that.$axios.post('',that.$qs.stringify({
-        //       user_id: that.$store.state.myInfo.user_id,
-        //       posting_id: that.posting[i].posting_id,
-        //     })
-        //   )
-        //   .then(res => {
-        //     console.log(res);
-		// 	console.log("取消点赞！");
-		// 	that.posting[i].islike = require('../static/like.png') ;
-        //    that.posting[i].likecount -= 1;
-        //   })
-        //   .catch(err => {
-        //     console.log(err);
-        //   });
-          that.posting[i].islike = require('../static/like.png') ;
-          that.posting[i].likecount -= 1;
+        console.log(that.posting[i].islike);
+          that.$axios.get(that.url1+'/backend/comment/deletelike',{
+				params:{
+					userId: that.$store.state.myInfo.user_id,
+					postingId: that.posting[i].postingId,
+				}
+		  })
+          .then(res => {
+			console.log(res.data.cancelLike)
+			if(res.data.cancelLike){
+				console.log("取消点赞！");
+				that.posting[i].islike = require('../static/like.png')
+				that.posting[i].likeSum -= 1
+				// that.getpost()
+			}else{
+				setTimeout(function(){
+				that.$message({
+					showClose: true,
+					message: '取消点赞失败！',
+					type: 'error'
+				});
+			},500)
+			}
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        //   that.posting[i].islike = require('../static/like.png') ;
+        //   that.posting[i].likeSum -= 1;
         }
 
 	  },
@@ -293,7 +327,7 @@ export default {
 	  //发表评论
 	  toPubtalk(){
 		  let that = this;
-			that.$axios.post('',that.$qs.stringify({
+			that.$axios.post(that.url1+'/backend/comment/addcomment',that.$qs.stringify({
 				userId: that.$store.state.myInfo.user_id,
 				postingId: that.posting[that.index].postingId,
 				// time: that.$store.state.getTime(),
@@ -302,7 +336,8 @@ export default {
 			)
 			.then(res =>{
 			console.log(res);
-			console.log("评论成功！");
+			if(res.data.Success){
+				console.log("评论成功！");
 			setTimeout(function(){
 				that.$message({
 					showClose: true,
@@ -312,12 +347,23 @@ export default {
 			},500)
 			// that.posting[i].microComm += 1;
 			that.comment_content = "";
-			that.getPostswespace();
+			that.getpost();
+			}
+			else{
+				setTimeout(function(){
+				that.$message({
+					showClose: true,
+					message: '发表失败！',
+					type: 'error'
+				});
+			},500)
+			}
+			
 			})
 			.catch(function (error) {
 			console.log(error);
 			});
-			this.talk = !this.talk;
+			that.talk = !that.talk;
 	  },
 	  //展示发帖框
 	  showpubform(){
@@ -349,30 +395,45 @@ export default {
 	  //获取用户帖子
 	  getpost(){
 		let that = this;
-		that.$axios.get(that.url1+'/backend/comment/listall',that.$qs.stringify({
-            userId: that.$store.state.myInfo.user_id,
-		  })
+		console.log(that.$store.state.myInfo.user_id)
+		that.$axios.get(that.url1+'/backend/comment/listall', {
+				params:{
+						userId: that.$store.state.myInfo.user_id
+					}
+				}
 		)
 		.then(res => {
 			console.log(res)
-			that.posting = res.data.postingList
+			console.log(res.data.postingList)
+			that.posting = res.data.postingList.reverse()
+			//处理用户头像和帖子图片
 			for(let index in that.posting){
 				for(let index1 in that.posting[index].postingpic){
 					console.log(that.posting[index].postingpic[index1].postingPic)
 					that.posting[index].postingpic[index1].postingPic = that.url+that.posting[index].postingpic[index1].postingPic
 				}
-
 				that.posting[index].userHead =  that.url+that.posting[index].userHead
-
+			}
+			//处理评论里头像
+			for(let index in that.posting){
+				for(let index2 in that.posting[index].comment){
+					console.log(that.posting[index].comment[index2].userHead)
+					that.posting[index].comment[index2].userHead = that.url+that.posting[index].comment[index2].userHead
+				}
+			}
+			//处理点赞显示
+			for(let index in that.posting){
 				console.log(that.posting[index].islike)
-				if(that.posting[index].islike){
+				if(that.posting[index].islike == true){
 					that.posting[index].islike = require('../static/like-active.png')
+					console.log(that.posting[index].islike)
 				}
 				else{
 					that.posting[index].islike = require('../static/like.png')
+					console.log(that.posting[index].islike)
 				}
-				console.log("成功获取数据赋值给posting");
 			}
+
 		})
 		.catch(err => {
 			console.log(err)
@@ -489,14 +550,6 @@ export default {
 }
 </script>
 <style scoped>
-			.user-image{
-				display: inline-block;
-				width: 30px;
-				height: 30px;
-				border-radius: 30px;
-				vertical-align: middle;
-				margin-right: 10px;
-			}
 			.headPhoto{
 				width: 70px;
 				height: 70px;
@@ -671,9 +724,9 @@ export default {
 			}
 			.user-image{
 				display: inline-block;
-				width: 30px;
-				height: 30px;
-				border-radius: 30px;
+				width: 40px;
+				height: 40px;
+				border-radius: 20px;
 				vertical-align: middle;
 				margin-right: 10px;
 			}

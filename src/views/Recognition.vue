@@ -4,7 +4,7 @@
 			<m></m>
 		</div>
 		<div  @click="bigpic=false" class="outer" v-show="bigpic">
-			<img :src="pet.pet_photo" alt="" class="inter" style="position:absolute;top:200px;margin-left:30%;z-index:3;opacity: 1">
+			<img :src="pet[0].petPhoto" alt="" class="inter" style="position:absolute;top:200px;margin-left:30%;z-index:3;opacity: 1">
 		</div>
 		<div class="box">
 		
@@ -14,16 +14,17 @@
 				<div class="uploadimg">
 					<img  :src="choosepic" width="150" height="150" style="border-radius: 35px;">
 						<input type="button" id="btn" value="上传识别" style="position:absolute;top:130px" @click="toshibie()">
+						<input type="button" id="btn" value="取消" style="position:absolute;top:100px" @click="toesc()">
 						<input type="file" id="fileinp1" value=""  @change="uploadpic($event)" accept=".jpg"> v
 						<p>提示：点击图标即可选择图片！</p>
 				</div>
 			</div>
-			<div class="right">
-				<img :src="pet.pet_photo" width="100px" height="100px" style="border-radius: 50px;margin:5px 0 0 10px;float:left" @click.stop="bigpic=!bigpic">
+			<div class="right" v-show="petnull">
+				<img :src="pet[0].petPhoto" width="100px" height="100px" style="border-radius: 50px;margin:5px 0 0 10px;float:left" @click.stop="bigpic=!bigpic">
 				<div class="intro">
-					<h2>{{pet.pet_name}}</h2>
+					<h2>{{pet[0].petName}}</h2>
 					<p  class="info">
-						<span>简介：</span><span>{{pet.pet_description}}</span> <br>
+						<span>简介：</span><span>{{pet[0].petDescription}}</span> <br>
 					</p>
 				</div>
 				
@@ -84,13 +85,13 @@
 								</div>
 								<!---帖子内容--->	
 								<div>	
-									<p>{{pub.postingContent}}</p>
+									<p style="margin-top:25px">{{pub.postingContent}}</p>
 									<img v-for="(image,index1) in pub.postingpic" :key="index1" style="margin-right:15px" width="150px" height="150px" :src="image.postingPic"/>
 									<div class="autor">
 										<img :src="pub.islike" height="20px" alt="" @click="tolike(index)">
-										<span style="margin-left: 10px;font-size:18px">{{pub.likecount}}</span>	
+										<span style="margin-left: 10px;font-size:18px">{{pub.likeSum}}</span>	
 										<img src="../static/talk.png" height="20px" style="margin-left: 10px" alt="" @click="totalk(index)">				
-										<span style="margin-left: 10px;font-size:18px">{{pub.talkcount}}</span>
+										<span style="margin-left: 10px;font-size:18px">{{pub.commentCount}}</span>
 									</div>
 								</div>
 								<!---帖子评论--->	
@@ -135,16 +136,18 @@ export default {
   },
   data(){
 	  return{
+		formdata1:'',
 		bigpic:false,
 		hh:'啦啦啦啦阿拉拉了',
 		choosepic:require("../static/addpic.png"),
 		formDatepic:'',//上传识别		
 		pic:'',
-		pet:{
-			pet_name:"哈士奇",
-			pet_photo:require("../assets/dog1.jpg"),
-			pet_description:"哈哈哈哈哈哈啊哈哈哈或哈"
-		},
+		petnull:false,
+		pet:[{
+			// pet_name:"哈士奇",
+			// pet_photo:require("../assets/dog1.jpg"),
+			// pet_description:"哈哈哈哈哈哈啊哈哈哈或哈"
+		}],
 		showpub:false,//控制发帖框
 		myinfo: this.$store.state.myInfo,
 		// user_head:this.url+this.$store.state.myInfo.user_head,
@@ -155,7 +158,7 @@ export default {
 		pubposting_content:'',
 	 	couponList:[
 					{
-						name: '金毛'
+						name: '金毛犬（黄金猎犬，金毛寻回犬）'
 					},
 					{
 						name: '泰迪'
@@ -199,48 +202,46 @@ export default {
 				],
         couponSelected: '',//petName选择
 		posting:[
-			{
-				userHead:this.url+'//images/default1.jpg',
-				// user_head:require("../assets/dog1.jpg"),
-				userName: '爱宠之家',
-				postingTime:'2019-12-8',
-				petName:'泰迪',
-				postingContent:'天气真好，适合带狗狗出去散步',
-				postingpic:[
-					{
-						postingPic:require("../assets/dog1.jpg")
-					},
-					{
-						postingPic:this.url+'//images/default1.jpg',
-					}
+			// {
+			// 	userHead:this.url+'//images/default1.jpg',
+			// 	// user_head:require("../assets/dog1.jpg"),
+			// 	userName: '爱宠之家',
+			// 	postingTime:'2019-12-8',
+			// 	petName:'泰迪（贵宾犬，贵妇犬，卷毛狗）',
+			// 	postingContent:'天气真好，适合带狗狗出去散步',
+			// 	postingpic:[
+			// 		{
+			// 			postingPic:require("../assets/dog1.jpg")
+			// 		},
+			// 		{
+			// 			postingPic:this.url+'//images/default1.jpg',
+			// 		}
 
-				],
-				talkcount:50,
-				islike:require('../static/like.png'),//根据true或false赋值
-				likecount:15,
-				comment:[
-					{
-						userHead:require("../assets/dog1.jpg"),
-						userName:'么么哒',
-						commentContent:'哈哈哈哈哈',
-						commentDate:'2019-12-31'
-					},
-					{
-						userHead:require("../assets/dog1.jpg"),
-						userName:'么么哒',
-						commentContent:'哈哈哈哈哈',
-						commentDate:'2019-12-31'
-					}
-				]
-			}
+			// 	],
+			// 	commentCount:50,
+			// 	islike:require('../static/like.png'),//根据true或false赋值
+			// 	likeSum:15,
+			// 	comment:[
+			// 		{
+			// 			userHead:require("../assets/dog1.jpg"),
+			// 			userName:'么么哒',
+			// 			commentContent:'哈哈哈哈哈',
+			// 			commentDate:'2019-12-31'
+			// 		},
+			// 		{
+			// 			userHead:require("../assets/dog1.jpg"),
+			// 			userName:'么么哒',
+			// 			commentContent:'哈哈哈哈哈',
+			// 			commentDate:'2019-12-31'
+			// 		}
+			// 	]
+			// }
 		],
 		talk:false,//控制评论框
 		pubcomment_content:''
-	
 	}
   },
   beforeMount(){
-	// this.getpost()
 	if(!this.$store.state.myInfo.user_id){
 		 setTimeout (() => {
           this.$router.replace({
@@ -253,6 +254,12 @@ export default {
 //             this.couponSelected = this.couponList[0].id;
 //          },
   methods:{
+	  	toesc(){
+			this.formData.delete("file");
+			this.formdata1 = ''
+			console.log(this.formdata1)
+			this.choosepic=require("../static/addpic.png")
+		  },
 	  	//选择识别的图片
 		uploadpic (el) {
 			if (!el.target.files[0].size) return; // 如果文件大小为0，则返回
@@ -270,14 +277,16 @@ export default {
 				// 读取完成后，将结果赋值给img的src
 				that.choosepic = this.result;
 				};
-				const formData = new FormData();  // 创建一个formdata对象
+				let formData = new FormData();  // 创建一个formdata对象
 				formData.append("file", el.target.files[0],el.target.files[0].name); 
 				that.formdata1 = formData
+				console.log(that.formdata1)
 			}
 		},
 		//确认上传识别
 		toshibie(){
 			let that = this
+			console.log(that.formdata1)
 			if(!that.formdata1){
 				that.$message({
 						showClose: true,
@@ -289,12 +298,19 @@ export default {
 				let config = {
 					headers: {'Content-Type': 'multipart/form-data'}
 					}
-				console.log("hahah") 
-				that.$axios.post('http://10.100.32.114:5000/photo',that.formdata1,config)
+				setTimeout (() => {
+					that.$message({
+						showClose: true,
+						message: '识别需要时间，请耐心等待！',
+						type: 'success'
+					});
+			}, 1000)
+				that.$axios.post(that.url2+'/photo',that.formdata1,config)
 					.then((res) => {
 						that.choosepic = require("../static/addpic.png")
 						console.log(res.data)
 						let dogname = res.data
+						console.log(dogname+'名字')
 						that.togetdog(dogname)//传给后端获取信息
 					})
 					.catch((err) => {
@@ -308,68 +324,150 @@ export default {
 				})			
 			}
 		},
-		//把返回的狗品种名传给后端获取数据库中的信息
+		//把返回的狗品种名传给后端获取狗的信息
 		togetdog(i){
+			console.log(i)
 			let that = this
 			let pet_type = i
-			that.$axios.get('',that.$qs.stringify({
-					 user_id: that.$store.state.myInfo.user_id,
-					pet_type: pet_type
-				})
-			)
+			that.$axios.get(that.url1+'/backend/pet/querypet',{
+				params:{
+						petId: pet_type
+					}
+			})
 			.then(res=>{
 				console.log(res)
+				console.log(res.data.information)
+				this.petnull=true
+				that.pet = res.data.information
+				//赋值显示，并获取相关的帖子。
 				console.log("获取相关的贴子")
-				this.getpost()
+				this.getlinkedpost(pet_type)
 			})
 			.catch(err => {
 				console.log(err)
 			})
 
-			},
-	
+		},
+		//获取相关的帖子
+	  	getlinkedpost(i){
+			let petId = i
+			let that = this;
+			that.$axios.get(that.url1+'/backend/comment/listrelativeposting',{
+				params:{
+						userId: that.$store.state.myInfo.user_id,
+						petId: petId
+					}
+			})
+			.then(res => {
+				console.log(res)
+				that.posting = res.data.postingList.reverse()
+				for(let index in that.posting){
+					for(let index1 in that.posting[index].postingpic){
+						console.log(that.posting[index].postingpic[index1].postingPic)
+						that.posting[index].postingpic[index1].postingPic = that.url+that.posting[index].postingpic[index1].postingPic
+					}
+
+					that.posting[index].userHead =  that.url+that.posting[index].userHead
+
+					console.log(that.posting[index].islike)
+					if(that.posting[index].islike){
+						that.posting[index].islike = require('../static/like-active.png')
+					}
+					else{
+						that.posting[index].islike = require('../static/like.png')
+					}
+					console.log("成功获取数据赋值给posting");
+				}
+				//处理评论里头像
+				for(let index in that.posting){
+					for(let index2 in that.posting[index].comment){
+					console.log(that.posting[index].comment[index2].userHead)
+					that.posting[index].comment[index2].userHead = that.url+that.posting[index].comment[index2].userHead
+					}
+				}
+			})
+				.catch(err => {
+					console.log(err)
+					that.$message({
+							showClose: true,
+							message: '获取帖子列表异常！',
+							type: 'error'
+						});
+				})
+		},
 		//点赞
 		tolike(i){
-			let that = this
-			if(that.posting[i].islike == require('../static/like.png') ){
-			// 	 that.$axios.post('',that.$qs.stringify({
-			//       user_id: that.$store.state.myInfo.user_id,
-			//       posting_id: that.posting[i].posting_id,
-			//     })
-			//   )
-			//   .then(res => {
-			//     console.log(res);
-			// 	console.log("点赞成功！");
-			// 	that.posting[i].islike =  require('../static/like-active.png') ;
-			//     that.posting[i].likecount += 1;
-			//   })
-			//   .catch(err =>{
-			//     console.log(err);
-			//   });
+		let that = this
+		if(that.posting[i].islike == require('../static/like.png') ){
+			 that.$axios.get(that.url1+'/backend/comment/insertlike',{
+				params:{
+					userId: that.$store.state.myInfo.user_id,
+					postingId: that.posting[i].postingId,
+				}
+			})
+          .then(res => {
+			console.log(res);
+			if(res.data.like){
+				console.log("点赞成功！");
 			that.posting[i].islike =  require('../static/like-active.png') ;
-			that.posting[i].likecount += 1;
+			that.posting[i].likeSum += 1;
+			}else{
+				console.log("点赞失败！");
+				setTimeout(function(){
+					that.$message({
+						showClose: true,
+						message: '点赞失败！',
+						type: 'error'
+						});
+				},500)
 			}
-			else{
-			// 取消点赞
-			console.log(that.posting[i].posting_id);
-			//   that.$axios.post('',that.$qs.stringify({
-			//       user_id: that.$store.state.myInfo.user_id,
-			//       posting_id: that.posting[i].posting_id,
-			//     })
-			//   )
-			//   .then(res => {
-			//     console.log(res);
-			// 	console.log("取消点赞！");
-			// 	that.posting[i].islike = require('../static/like.png') ;
-			//    that.posting[i].likecount -= 1;
-			//   })
-			//   .catch(err => {
-			//     console.log(err);
-			//   });
-			that.posting[i].islike = require('../static/like.png') ;
-			that.posting[i].likecount -= 1;
+			// that.posting[i].islike = require('../static/like-active.png') ;
+         	// that.posting[i].likeSum += 1;
+          })
+          .catch(err =>{
+			console.log(err);
+			setTimeout(function(){
+				that.$message({
+					showClose: true,
+					message: '点赞失败！',
+					type: 'error'
+				});
+			},500)
+          });
+		}
+		else{
+          // 取消点赞
+        console.log(that.posting[i].postingId);
+          that.$axios.get(that.url1+'/backend/comment/deletelike',{
+				params:{
+					userId: that.$store.state.myInfo.user_id,
+					postingId: that.posting[i].postingId,
+				}
+		  })
+          .then(res => {
+			console.log(res);
+			if(res.data.cancelLike){
+				console.log("取消点赞！");
+				that.posting[i].islike = require('../static/like.png') ;
+				that.posting[i].likeSum -= 1;
+			}else{
+				setTimeout(function(){
+				that.$message({
+					showClose: true,
+					message: '取消点赞失败！',
+					type: 'error'
+				});
+			},500)
 			}
-		},
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        //   that.posting[i].islike = require('../static/like.png') ;
+        //   that.posting[i].likeSum -= 1;
+        }
+
+	  	},
 	  	//控制评论框
 	  	totalk(i){
 			this.index = i;
@@ -383,19 +481,17 @@ export default {
 	 	//发表评论
 	  	toPubtalk(){
 		  let that = this;
-			that.$axios.post('',that.$qs.stringify({
-				user_id: that.$store.state.myInfo.user_id,
-				posting_id: that.posting[that.index].posting_id,
+			that.$axios.post(that.url1+'/backend/comment/addcomment',that.$qs.stringify({
+				userId: that.$store.state.myInfo.user_id,
+				postingId: that.posting[that.index].postingId,
 				// time: that.$store.state.getTime(),
-				comment_content: that.pubcomment_content
+				commentContent: that.pubcomment_content
 			})
 			)
 			.then(res =>{
 			console.log(res);
-			console.log("评论成功！");
-			console.log(that.index);
-			console.log(that.posting[that.index].talk_id);
-			console.log(that.pubcomment_content);
+			if(res.data.Success){
+				console.log("评论成功！");
 			setTimeout(function(){
 				that.$message({
 					showClose: true,
@@ -405,7 +501,17 @@ export default {
 			},500)
 			// that.posting[i].microComm += 1;
 			that.comment_content = "";
-			that.getPostswespace();
+			that.getlinkedpost();
+			}else{
+				setTimeout(function(){
+				that.$message({
+					showClose: true,
+					message: '发表失败！',
+					type: 'error'
+				});
+			},500)
+			}
+			
 			})
 			.catch(function (error) {
 			console.log(error);
@@ -439,39 +545,10 @@ export default {
 		handleRemove(file, fileList) {
 			console.log(file, fileList);
 		},
-	  	//获取用户帖子
-	  	getpost(){
-			let that = this;
-			that.$axios.get('',that.$qs.stringify({
-				user_id: that.$store.state.myInfo.user_id,
-			})
-			)
-			.then(res => {
-				console.log(res)
-				that.posting = res.data.postinglist
-				for(let index in that.posting){
-					console.log(that.posting[index].islike)
-					if(that.posting[index].islike){
-						that.posting[index].islike = require('../static/like-active.png')
-					}
-					else{
-						that.posting[index].islike = require('../static/like.png')
-					}
-					console.log("成功获取数据赋值给posting");
-				}
-			})
-			.catch(err => {
-				console.log(err)
-				that.$message({
-						showClose: true,
-						message: '获取帖子列表异常！',
-						type: 'error'
-					});
-			})
-		},
+	  
 	  	//发表
-     	subPicForm() {
-			let that =this
+      	subPicForm() {
+			let that = this
 			// let posting_time = that.$store.state.getTime()
 			// let pet_id = that.couponSelected
 			// let posting_content = that.posting_content
@@ -479,81 +556,97 @@ export default {
 			let posting_id = that.$store.state.getPid()
 			console.log(posting_id)
 			// console.log(that.$store.state.getTime())
-				if( !that.couponSelected){
-					that.$message({
-									showClose: true,
-									message: '请选择帖子类别！',
-									type: 'error'
-							});
-				}else{
-					that.$axios.post(that.url+"/post/newpost", that.$qs.stringify({
-				posting_id: posting_id,
-				user_id: that.$store.state.myInfo.user_id,
-				pet_id : that.couponSelected,
-				posting_content : that.pubposting_content,
-				posting_time: that.$store.state.getTime()
+			if( !that.couponSelected){
+				that.$message({
+								showClose: true,
+								message: '请选择帖子类别！',
+								type: 'error'
+						});
+			}else{
+				console.log(that.couponSelected)
+				that.$axios.get(that.url1+"/backend/comment/chinesetoenglish", {
+				params:{
+						petName: that.couponSelected
+					}
 				})
-			)
-			.then(res => {
-				console.log(res)
-				if(res.data.status == 2){
-					console.log("帖子内容发表成功")
-					that.formDate = new FormData();
-					that.$refs.upload.submit();
-					that.formDate.append('posting_id', posting_id);
-					let config = {
-						headers: {
-							'Content-Type': 'multipart/form-data'
-						}
-					};
-					that.$axios.post(this.url+"/post/postingpic", that.formDate, config)
-					.then(res => {
-						console.log(res)
-						if(res.data.status == 2){
-							that.$message({
-								showClose: true,
-								message: '发表成功！',
-								type: 'success'
-							});
-							that.showpub = false;
-							that.couponSelected = ""
-							that.posting_content = ""
-							that.$refs.upload.clearFiles();
-						}
-						else{
-								that.$message({
-								showClose: true,
-								message: '帖子发表异常！',
-								type: 'error'
-							});
-						}
-						
-						}).catch(res => {
-						console.log(res)
-						that.$message({
-								showClose: true,
-								message: '帖子发表异常！',
-								type: 'error'
-							});
+				.then(res=>{
+					console.log(res.data)
+					console.log("你好呀")
+					let pet_chinesename = res.data.petId
+					that.$axios.post(this.url+"/post/newpost", that.$qs.stringify({
+						posting_id: posting_id,
+						user_id: that.$store.state.myInfo.user_id,
+						pet_id : pet_chinesename,
+						posting_content : that.pubposting_content,
+						posting_time: that.$store.state.getTime()
 						})
-				}
-				else{
-					that.$message({
+					)
+					.then(res => {
+		  				console.log(res)
+		  				if(res.data.status == 2){
+			  				console.log("帖子内容发表成功")
+			  	    		that.formDate = new FormData();
+				    		that.$refs.upload.submit();
+				    		that.formDate.append('posting_id', posting_id);
+				    		let config = {
+				      			headers: {
+				        			'Content-Type': 'multipart/form-data'
+				     			}
+				    		};
+				   		that.$axios.post(this.url+"/post/postingpic", that.formDate, config)
+				   		.then(res => {
+					   	console.log(res)
+					   	if(res.data.status == 2){
+						   that.$message({
+							showClose: true,
+							message: '发表成功！',
+							type: 'success'
+						});
+						that.getlinkedpost()
+						that.showpub = false;
+						that.couponSelected = ""
+						that.pubposting_content = ""
+						that.$refs.upload.clearFiles();
+					    }
+					   	else{
+						    that.$message({
+							showClose: true,
+							message: '帖子发表异常！',
+							type: 'error'
+						});
+					   }
+					  
+						})
+						.catch(res => {
+					  		console.log(res)
+					   		that.$message({
+							showClose: true,
+							message: '帖子发表异常！',
+							type: 'error'
+						});
+				    	})
+					}
+					else{
+						that.$message({
 							showClose: true,
 							message: '发表失败！',
 							type: 'error'
 						});
-				}
-			}).catch(res => {
-			console.log(res)
-			that.$message({
+					}
+        		}).catch(res => {
+					console.log(res)
+					that.$message({
 						showClose: true,
 						message: '发表失败！',
 						type: 'error'
 					});
+        		})
 			})
-			}
-		},
+			.catch(err=>{
+				console.log(err)
+			})	 
+		}	
+	},
 	},
 	
   }
@@ -776,7 +869,8 @@ export default {
 			}
 			.dogtype{
 				display: inline-block;
-				width: 60px;
+				/* width: 60px; */
+				padding:0 10px; 
 				height: 25px;
 				line-height: 25px;
 				font-size: 12px;
@@ -790,7 +884,7 @@ export default {
 				position: fixed;
 				height:85px;
 				width:85px;
-				top:14%;
+				top:235px;
 				left: 64%;
 				z-index: 2;
 			}

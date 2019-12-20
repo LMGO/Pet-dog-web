@@ -20,10 +20,10 @@
 			</div>
 			<div class="login-lay" v-show="showregform">	
                         <p>register</p>
-						<input type="text" value="" placeholder="手机号" v-model="regform.user_id">
-						<input type="text" value="" placeholder="用户名" v-model="regform.user_name">
-						<input type="password" placeholder="密码" v-model="regform.user_code">
-						<input type="password" placeholder="再次确认密码" v-model="regform.user_codeAgain">
+						<input type="text" value="" placeholder="手机号" v-model="regform.user_id" maxlength="11">
+						<input type="text" value="" placeholder="用户名" v-model="regform.user_name" maxlength="50">
+						<input type="password" placeholder="密码" v-model="regform.user_code" maxlength="10" @blur="code()">
+						<input type="password" placeholder="再次确认密码" v-model="regform.user_codeAgain" maxlength="10">
 						<br>
 						<form>
 							性别：
@@ -217,11 +217,26 @@ export default {
 					type: 'error'
 				});
 				}
-				}).catch(res => {
-				console.log(res)
+				}).catch(err => {
+				console.log(err)
+				this.$message({
+					showClose: true,
+					message: '登录失败！',
+					type: 'error'
+				});
 				})
 	    }
-    },
+	},
+	//自动判断原密码
+	code(){
+		if(5>=this.regform.user_code){
+			this.$message({
+						showClose: true,
+						message: '密码太短！',
+						type: 'error'
+				});
+		}
+	},
     register(){
 	  //表单验证，注册提示
 	  let that = this
@@ -235,13 +250,22 @@ export default {
             message: '请填写相关信息！',
             type: 'error'
          });
-	  }else if(user_code!=user_codeAgain){
+	  }
+	else if(5>=user_code.length){
+		    that.$message({
+            showClose: true,
+            message: '密码长度太短！',
+            type: 'error'
+         });
+	  }
+		else if(user_code!=user_codeAgain){
 		    that.$message({
             showClose: true,
             message: '两次输入的密码不一致！',
             type: 'error'
          });
-	  }else{
+	  }
+	  else{
        that.$axios.get(that.url+"/users/reg", {
 		   params:{
 				user_id: that.regform.user_id,

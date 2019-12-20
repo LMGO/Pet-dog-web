@@ -69,7 +69,7 @@
 							</div>
 						<div style="float: right;width: 49%;position: relative;margin-top:10px;margin-left:5px;">
 							<img src="../../public/万能梗.jpg" @mouseenter="enter(3)" @mouseleave="leave()" width="100%"  height="400px" />
-							<span style="position: absolute; top: 20px; left: 20px;z-index:2;font-size:25px;color:white" v-show="seen&&current==3"><i style="color:yellow">万能梗&nbsp;:&nbsp;&nbsp;</i>万能梗是梗类特大型梗，名字取自其原产地约克夏郡的"Airedale"溪谷。
+							<span style="position: absolute; top: 20px; left: 20px;z-index:2;font-size:20px;color:white" v-show="seen&&current==3"><i style="color:yellow">万能梗&nbsp;:&nbsp;&nbsp;</i>万能梗是梗类特大型梗，名字取自其原产地约克夏郡的"Airedale"溪谷。
 							强壮且具有活力，愿意游泳，尤其喜欢在水中生活。 万能梗是水獭犬与已经绝种的黑褐梗配种改良产生的品种。通常被用来猎水獭，熊，狼，山猪，雄鹿等。一次世界大战时，首次被英国陆军当作守卫及传令任务的军犬使用。曾有一只名叫杰克的万能梗， 因在战场上
 							勇敢，死后荣获维多利亚十字勋章。万能梗忠诚友善，是较理想的家庭守卫犬，也有较顽固的一面，饲养者要以严格的态度来训练和关心它。 万能梗的优点是不脱毛。属于活力旺盛的狗，每日必须坚持长距离散步。</span> 
 						</div>
@@ -77,7 +77,7 @@
 				</div>
 				<div style="width: 34%;float: right;position: relative;margin-left:10px;margin-top:10px;">
 					<img src="../../public/美国斯塔福郡梗.jpg"  @mouseenter="enter(2)" @mouseleave="leave()" width="100%" height="900px" />
-					<span style="position: absolute; top:500px; left: 20px;z-index:2;font-size:25px;color:white" v-show="seen&&current==2"><i style="color:yellow">美国斯塔福郡梗&nbsp;:&nbsp;&nbsp;</i>美国斯塔福梗（American Staffordshire Terrier）斯塔福梗是
+					<span style="position: absolute; top:500px; left: 20px;z-index:2;font-size:20px;color:white" v-show="seen&&current==2"><i style="color:yellow">美国斯塔福郡梗&nbsp;:&nbsp;&nbsp;</i>美国斯塔福梗（American Staffordshire Terrier）斯塔福梗是
 					由斗牛犬和梗杂交而来的，最初叫做斗牛犬、牛梗杂交犬，有时被称为斗犬或斗牛梗。后来，在英格兰被命名为斯塔福斗牛梗。 美国斯塔福梗的标准中体重的范围较大，但应该与体形成比例。这种犬以其体形，结实匀称，头部强壮有力，躯体肌肉发达以及勇敢坚强而
 					闻名。 美国斯塔福硬给人的总体印象是：体形有力，紧凑，肌肉发达，而且活泼、热情，喜欢生活的环境。外形粗壮，但腿不宜太长，与外形不和谐。很有勇气。</span> 
 				</div>
