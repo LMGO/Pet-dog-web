@@ -13,9 +13,9 @@ Vue.prototype.$store = store;
 Vue.use(ElementUI)
 // Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
-Vue.prototype.url = 'http://10.100.122.144:8083';//用户图片服务器
-Vue.prototype.url1 = 'http://10.100.233.19:8081';//主体服务器
-Vue.prototype.url2 = 'http://10.100.84.79:5000';//识别服务器
+Vue.prototype.url = 'http://';//用户图片服务器
+Vue.prototype.url1 = 'http://';//主体服务器
+Vue.prototype.url2 = 'http://';//识别服务器
 new Vue({
   router,
   store,
